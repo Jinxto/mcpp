@@ -1,6 +1,5 @@
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           =
-PROJECT_NUMBER         =
+PROJECT_NUMBER         = mcpp
 PROJECT_BRIEF          = 
 PROJECT_LOGO           = ./resources/mcpplogosmall.png
 OUTPUT_DIRECTORY       = doc
