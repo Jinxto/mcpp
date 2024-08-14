@@ -1,0 +1,88 @@
+name: package-release
+
+on:
+    push:
+        paths-ignore:
+            -"README.md"
+            -"LICENSE"
+    
+    pull_request:
+        paths-ignore:
+            -"README.md"
+            -"LICENSE"
+
+    release:
+        types: [published] 
+
+jobs:
+    check_commit_message:
+        outputs:
+            commit_message: ${{ steps.capture_message.outputs.message }}
+        name: Check if workflow disabled
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+            - name: Capturing commit message
+              id: capture_message
+              run: |
+                echo "message=$(git log --format=%B -n 1 ${{ github.event.after }})" >> $GITHUB_OUTPUT
+    linux:
+        strategy:
+            fail-fast: false
+            matrix:
+                build-type: [Release, RelWithDebInfo]
+                distro: [testing,sid]
+        needs: check_commit_message
+        if: ${{ contains(needs.check_commit_message.outputs.commit_message,'RELEASE')}}
+        name: Debian-release ${{matrix.distro}}
+        runs-on: ubuntu-latest
+        container: debian:${{matrix.distro}}
+        steps:
+            - name: Setting up git
+              run: |
+               apt-get update
+               apt-get install -y git
+
+            - name: Getting version
+              id: get_version
+              shell: bash
+              run: echo "VERSION=$(echo $GITHUB_REF | cut -d / -f 3)" >> $GITHUB_OUTPUT
+            
+            - name: Checking out sources
+              uses:  actions/checkout@v4
+              with:
+                submodules: "recursive"
+            - name: Install build dependencies
+              run: |
+                 apt-get install -y build-essential ninja-build qtbase5-dev qttools5-dev cmake pkgconf bash libspdlog-dev
+            - name: Build
+              run: |
+               mkdir build
+               cd build
+               cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DBUILD_DEB=ON -DPROJECT_VERSION=${{matrix.distro.get_version}}
+               cmake --build . --target package --parallel $(nproc)
+               cd build
+               ls
+               cd ..
+
+            - name: Get package name
+              shell: bash
+              id: get_package
+              run: |
+                echo "NAME=$(basename build/mcpp_*.deb)" >> $GITHUB_OUTPUT
+            
+            - name: Upload artifacts
+              uses: actions/upload-artifact@v4
+              with:
+                name: mcpp-${{ steps.get_version.outputs.VERSION }}-debian-${{ matrix.distro }}-${{ matrix.build-type }}.deb
+                path: build/${{ steps.get_package.outputs.NAME }}
+            
+            - name: Upload package to release
+              uses: svenstaro/upload-release-action@v2
+              if: startsWith(github.event.ref, 'ref/tags/')
+              with:
+                  repo_token: ${{ secrets.GITHUB_TOKEN }}
+                  file: build/${{steps.get_package.outputs.NAME}}
+                  asset_name: Rozukke-${{steps.get_version.outputs.version}}--debian-${{matrix.distro}}-${{matrix.build_type}}.deb
+                  tag: ${{github.ref}}
+                  overwrite: true
