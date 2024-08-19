@@ -73,9 +73,6 @@ jobs:
                 NAME=$(basename build/mcpp-*.deb)
                 echo "NAME=$NAME"
 
-
-                
-            
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
               with:
