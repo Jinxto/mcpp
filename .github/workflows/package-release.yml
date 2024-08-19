@@ -70,7 +70,8 @@ jobs:
               shell: bash
               id: get_package
               run: |
-                echo "NAME=$(basename build/mcpp-*.deb)" >> $GITHUB_OUTPUT
+                NAME=$(basename build/mcpp-*.deb)
+                echo "NAME=$NAME"
 
 
                 
