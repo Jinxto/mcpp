@@ -66,7 +66,7 @@ jobs:
               shell: bash
               id: get_package
               run: |
-                echo "NAME=$(basename build/mcpp_*.deb)" >> $GITHUB_OUTPUT
+                echo "NAME=$(basename build/mcpp-*.deb)" >> $GITHUB_OUTPUT
             
             - name: Upload artifacts
               uses: actions/upload-artifact@v4
