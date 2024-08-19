@@ -2,8 +2,15 @@ name: package-release
 
 on:
     push:
-      tags:
-        - '*'
+        paths-ignore:
+            -"README.md"
+            -"LICENSE"
+    
+    pull_request:
+        paths-ignore:
+            -"README.md"
+            -"LICENSE"
+
     release:
         types: [published] 
 
