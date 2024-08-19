@@ -47,7 +47,7 @@ jobs:
               id: get_version
               shell: bash
               run: |
-               echo "VERSION=$(echo $GITHUB_REF | cut -d / -f 3)" >> $GITHUB_OUTPUT 
+               echo "VERSION=$(echo $GITHUB_REF_NAME | cut -d / -f 3)" >> $GITHUB_OUTPUT 
                echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
                echo "Tag name from github.ref_name: ${{  github.ref_name }}"
             
