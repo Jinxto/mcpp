@@ -41,7 +41,7 @@ jobs:
             - name: Setting up git
               run: |
                apt-get update
-               apt-get install -y git
+               apt-get install -y git 
 
             - name: Getting version
               id: get_version
