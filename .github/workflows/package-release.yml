@@ -61,9 +61,6 @@ jobs:
                cd build
                cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DBUILD_DEB=ON -DPROJECT_VERSION=${{matrix.distro.get_version}}
                cmake --build . --target package --parallel $(nproc)
-               cd build
-               ls
-               cd ..
 
             - name: Get package name
               shell: bash
@@ -76,7 +73,7 @@ jobs:
               with:
                 name: mcpp-${{ steps.get_version.outputs.VERSION }}-debian-${{ matrix.distro }}-${{ matrix.build-type }}.deb
                 path: build/${{ steps.get_package.outputs.NAME }}
-            
+             
             - name: Upload package to release
               uses: svenstaro/upload-release-action@v2
               if: startsWith(github.event.ref, 'ref/tags/')
