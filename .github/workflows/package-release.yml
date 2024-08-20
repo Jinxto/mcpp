@@ -61,9 +61,9 @@ jobs:
               run: |
                mkdir build
                cd build
-               cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}  -DPROJECT_VERSION=${{steps.get_version.outputs.VERSION}}
+               cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}  -DPROJECT_VERSION=${{steps.get_version.outputs.version}}
                cmake --build . --target package --parallel $(nproc)
-               echo "VERSION=${{steps.get_version.outputs.VERSION}} "
+               echo "VERSION=${{steps.get_version.outputs.version}} "
 
 
             - name: Get package name
