@@ -84,7 +84,7 @@ jobs:
                 path: build/${{ steps.get_package.outputs.NAME }}
              
             - name: Upload package to release
-              uses: svenstaro/upload-release-action@v2
+              uses: svenstaro/upload-release-action@v2 
               if: startsWith(github.event.ref, 'ref/tags/')
               with:
                   repo_token: ${{ secrets.GITHUB_TOKEN }}
