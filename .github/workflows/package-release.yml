@@ -48,7 +48,7 @@ jobs:
               shell: bash
               run: |
                  VERSION=$(echo $GITHUB_REF_NAME | cut -d / -f 2)
-                 echo "VERSION=$VERSION"
+                 echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
                
             
             - name: Checking out sources
@@ -58,11 +58,13 @@ jobs:
             - name: Install build dependencies
               run: |
                  apt-get install -y build-essential ninja-build qtbase5-dev qttools5-dev cmake pkgconf bash libspdlog-dev
-            - name: Build
+            - name: Configure build
               run: |
                mkdir build
                cd build
                cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}  -DPROJECT_VERSION=${{steps.get_version.outputs.VERSION}}
+            - name: Build
+              run: |
                cmake --build . --target package --parallel $(nproc)
                echo "VERSION=${{steps.get_version.outputs.VERSION}}"
 
