@@ -63,7 +63,8 @@ jobs:
               run: |
                mkdir build
                cd build
-               cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DBUILD_DEB=ON -DPROJECT_VERSION=${{matrix.distro.get_version}}
+               cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}  -DPROJECT_VERSION=${{steps.get_version}}
+               echo ${{steps.get_version}} 
                cmake --build . --target package --parallel $(nproc)
 
             - name: Get package name
