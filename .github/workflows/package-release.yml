@@ -47,7 +47,7 @@ jobs:
               id: get_version
               shell: bash
               run: |
-               VERSION=$(echo $GITHUB_REF_NAME | cut -d / -f 2)
+               VERSION=$(echo $GITHUB_REF_NAME | cut -d / -f 2) >> $GITHUB_OUTPUT
                echo "$VERSION"
             
             - name: Checking out sources
@@ -63,7 +63,7 @@ jobs:
                cd build
                cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}  -DPROJECT_VERSION=${{steps.get_version.outputs.version}}
                cmake --build . --target package --parallel $(nproc)
-               echo "VERSION=${{steps.get_version.outputs.version}} "
+               echo "VERSION=${{steps.get_version.outputs.version}}"
 
 
             - name: Get package name
