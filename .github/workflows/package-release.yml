@@ -62,8 +62,9 @@ jobs:
                mkdir build
                cd build
                cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}  -DPROJECT_VERSION=${{steps.get_version}}
-               echo ${{steps.get_version}} 
                cmake --build . --target package --parallel $(nproc)
+               echo "VERSION=${{steps.get_version}} "
+
 
             - name: Get package name
               shell: bash
