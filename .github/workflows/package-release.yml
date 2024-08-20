@@ -47,8 +47,8 @@ jobs:
               id: get_version
               shell: bash
               run: |
-               VERSION=$(echo $GITHUB_REF_NAME | cut -d / -f 2) >> $GITHUB_OUTPUT
-               echo "$VERSION"
+                echo "VERSION=$(echo $GITHUB_REF | cut -d / -f 2)" >> $GITHUB_OUTPUT
+               
             
             - name: Checking out sources
               uses:  actions/checkout@v4
