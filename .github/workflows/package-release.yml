@@ -48,9 +48,7 @@ jobs:
               shell: bash
               run: |
                VERSION=$(echo $GITHUB_REF_NAME | cut -d / -f 2)
-               echo "VERSION=$VERSION"
-               echo "Tag name from GITHUB_REF_NAME: $GITHUB_REF_NAME"
-               echo "Tag name from github.ref_name: ${{  github.ref_name }}"
+               echo "$VERSION"
             
             - name: Checking out sources
               uses:  actions/checkout@v4
@@ -63,7 +61,7 @@ jobs:
               run: |
                mkdir build
                cd build
-               cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}  -DPROJECT_VERSION=VERSION
+               cmake .. -GNinja  -DCMAKE_BUILD_TYPE=${{ matrix.build-type }}  -DPROJECT_VERSION=${{steps.get_version.VERSION}}
                echo ${{steps.get_version}} 
                cmake --build . --target package --parallel $(nproc)
 
