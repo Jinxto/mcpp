@@ -67,7 +67,7 @@ jobs:
             - name: Build
               run: |
                cd build
-               cmake --build . --target package --parallel $(nproc)
+               cmake --build . --target package --parallel $(nproc) 
 
 
             - name: Get package name
