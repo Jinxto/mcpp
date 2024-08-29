@@ -52,7 +52,7 @@ jobs:
                 echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
                
             - name: Checking out sources
-              uses: actions/checkout@v4
+              uses: actions/checkout@v4 
                 
             - name: Install build dependencies
               run: |
